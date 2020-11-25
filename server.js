@@ -34,11 +34,14 @@ app.get('/createAccount', dish.getCreateAccount);
 //LOGIN PAGE
 app.get('/login', dish.getLogin);
 
-//GENERATE QR CODE PAGE
+//QR CODE PAGE
 app.get('/qrcode', dish.getQRcode);
 
-//VIEW MENU
+//VIEW MENU PAGE
 app.get('/menu', dish.getMenu);
+
+//EDIT DISH
+app.get('/getEditDish/:id', dish.getEditDish)
 
 
 // ----------> POST ROUTES
@@ -47,10 +50,16 @@ app.get('/menu', dish.getMenu);
 app.post('/dish/save', dish.saveDish);
 
 //CREATE USER ACCOUNT AND SAVE TO DB
-app.post('/createAccount/save', dish.createAccount);
+app.post('/postCreateAccount/save', dish.postCreateAccount);
 
 //CREATE QR CODE
-app.post('/user/qrCode', dish.showQRcode)
+// app.post('/user/qrCode', dish.showQRcode)
+
+//EDIT DISH
+app.post('/dish/postEditDish', dish.postEditDish);
+
+//DELETE DISH
+app.post('/dish/deleteDish', dish.deleteDish);
 
 
 app.listen(port, () => {
