@@ -13,7 +13,7 @@ exports.getHome = (req,res) => {
         .render('home', {
             dishes: data
         })
-    }).catch((e)=>console.log("An error has occurred:" +e));
+    }).catch((e)=>console.log("An error has occurred in getHome:" +e));
 }
 
 //RENDERS CREATE ACCOUNT PAGE
@@ -47,35 +47,35 @@ exports.getMenu = (req,res) => {
         res
         .status(200)
         .render('menu', {
-            id: data.id,
+        _id: data._id,
         name: data.name,
         description: data.description,
         price: data.price,
-        image: data.image.src,
+        image: data.image,
         plato: data.plato,
         })
-    }).catch((e)=>console.log("An error has occurred:" +e));
+    }).catch((e)=>console.log("An error has occurred in getMenu:" +e));
 }
     
 //LOADS DESIRED DISH TO EDIT IN FORM
-exports.getEditDish = (req,res) => {
+exports.getDish = (req,res) => {
     db
     .getDishDetails(req.params.id)
     .then((data)=> {
-        console.log("getEditDish module")
+        console.log("getDish module")
         console.log(data)
         res.render("home", {
-            route: "/dish/postEditDish",
-            id: data.id,
+            route: "/dish/editDish",
+            _id: data._id,
             name: data.name,
             description: data.description,
             price: data.price,
-            image: data.image.src,
+            image: data.image,
             plato: data.plato,
         })
     }).catch((e)=>console.log(`And error occurred ${e}`))
 }
-  
+
 
 // ---------> POST MODULES
 
@@ -90,7 +90,6 @@ exports.saveDish = (req,res) => {
     .then(()=>{
         res
         .status(200)
-        .redirect("/")
     })
     .catch((e)=> {
         console.log("An error has occurred " + e)
@@ -115,27 +114,28 @@ exports.postCreateAccount = (req,res) => {
     })
 }
 
-//POST METHOD TO EDIT DISH
-exports.postEditDish = (req,res) => {
-    console.log(req.body)
-    let name = req.body.id;
-    console.log(id);
+//POST METHOD TO UPDATE DISH
+exports.editDish = (req,res) => {
+    console.log('dish.editDish')
+    let _id = req.body._id;
+    console.log(req.body);
+    console.log(_id);
+    console.log('++++++++++++++++++++++++++');
     db
-    .updateDishDoc(id, req.body)
+    .updateDish(_id, req.body)
     .then(()=> {
         res
         .status(200)
-        .redirect("/");
     }).catch((e)=> console.log("An unexpected error has occurred:"+e))
 }
 
 //POST METHOD TO DELETE DISH
 exports.postDeleteDish = (req,res) => {
+    console.log(req.body);
     db
-    .deleteDishDoc(req.body)
+    .postDeleteDish(req.body)
     .then(() => {
         res
         .status(200)
-        .redirect("/")
     }).catch((e)=> console.log("An error has occurred "+e))
 }

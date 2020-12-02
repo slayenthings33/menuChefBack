@@ -1,0 +1,2 @@
+let dish = {"name":"spaghettie","description":"A tasty pasta dish covered in tomato sauce and parmesan", "price":10, "image": "/img/image", "plato":"plato principal"};
+

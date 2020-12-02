@@ -1,6 +1,6 @@
 const express = require("express")
 const app = express()
-const port = 3000
+const port = 3000;
 const dish = require("./dish")
 const bodyParser = require('body-parser');
 
@@ -29,19 +29,19 @@ app.use("/", express.static('public'));
 app.get('/', dish.getHome);
 
 //CREATE ACCOUNT
-app.get('/createAccount', dish.getCreateAccount);
+// app.get('/createAccount', dish.getCreateAccount);
 
 //LOGIN PAGE
-app.get('/login', dish.getLogin);
+// app.get('/login', dish.getLogin);
 
 //QR CODE PAGE
-app.get('/qrcode', dish.getQRcode);
+// app.get('/qrcode', dish.getQRcode);
 
 //VIEW MENU PAGE
 app.get('/menu', dish.getMenu);
 
 //EDIT DISH
-app.get('/getEditDish/:id', dish.getEditDish)
+app.get('/getDish/:id', dish.getDish)
 
 
 // ----------> POST ROUTES
@@ -56,10 +56,10 @@ app.post('/postCreateAccount/save', dish.postCreateAccount);
 // app.post('/user/qrCode', dish.showQRcode)
 
 //EDIT DISH
-app.post('/dish/postEditDish', dish.postEditDish);
+app.post('/dish/editDish', dish.editDish);
 
 //DELETE DISH
-app.post('/dish/deleteDish', dish.deleteDish);
+app.post('/dish/deleteDish', dish.postDeleteDish);
 
 
 app.listen(port, () => {

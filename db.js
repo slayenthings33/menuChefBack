@@ -11,13 +11,24 @@ const connect = async() => {
   }
 
 
+//METHOD TO ADD ONE DISH TO COLLECTION
+exports.createDish = async (dish) => {
+  client = await connect();
+  const result = await client
+  .db("dishesDB")
+  .collection("dishes")
+  .insertOne(dish);
+  console.log(`New dish created with the following id: ${result.insertedId}`);
+}
+
+
 //METHOD TO RETRIEVE ONE EXISTING DISH FROM COLLECTION
 exports.getDishDetails = async (data) => {
     const client = await connect();
     result = await client
       .db("dishesDB")
       .collection("dishes")
-      .findOne({name: data});
+      .findOne({_id: ObjectID(data)});
     if(result) {
       console.log(`The dish - ${data} - has been found in the collection.`)
       return result;
@@ -42,51 +53,42 @@ exports.getAllDishes = async () => {
     }
 };
 
-//METHOD TO ADD ONE SPECIFIC DISH TO COLLECTION
-exports.createDish = async (dish) => {
-    client = await connect();
-    const result = await client
-    .db("dishesDB")
-    .collection("dishes")
-    .insertOne(dish);
-    console.log(`New dish created with the following id: ${result.insertedId}`);
-}
-
 
 //METHOD TO DELETE DISH FROM COLLECTION
-exports.deleteDishDoc = async(data) => {
+exports.postDeleteDish = async(data) => {
     const client = await connect();
     result = await client
       .db("dishesDB")
       .collection("dishes")
-      .deleteOne({name: data.name})
+      // .deleteOne({name: data.name})
+      .deleteOne({_id: ObjectID(data._id)})
+    console.log(result);
     return result;
-  }
+}
 
 
 //METHOD TO UPDATE A DISH IN COLLECTION
-exports.updateDishDoc = async(id, editedDish) => {
+exports.updateDish = async(id, editedDish) => {
     const client = await connect();
     console.log(editedDish)
-    console.log(editedDish.name)
+    console.log(editedDish._id)
     result = await client
-      .db("movieDB")
-      .collection("movies")
+      .db("dishesDB")
+      .collection("dishes")
       .updateOne(
-        {"id": ObjectID(id) }, // Filtered
-        { $set: {
-            'id': editedDish.id,
+        {_id: ObjectID(id)}, //Filter
+        { $set: {             //Update
             'name': editedDish.name,
             'description': editedDish.description,
             'price': editedDish.price,
-            'imagen': editedDish.imagen.src,
+            'imagen': editedDish.imagen,
             'plato': editedDish.plato,
         }}, //UPDATED
-        {upsert: true}
+        {upsert: false}
         );
     console.log(`${result.matchedCount} documents which coincide with request.`);
     if (result.upsertedCount > 0) { 
-        console.log(`A dish was created with id: ${result.upsertedId._id}`);
+        console.log(`A dish was updated with id: ${result.upsertedId._id}`);
         return result;
       } else {
         console.log(`${result.modifiedCount} could not be modified.`);
